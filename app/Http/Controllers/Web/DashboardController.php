@@ -40,7 +40,7 @@ class DashboardController extends Controller
      */
     public function books()
     {
-        $books = Book::with(['authors', 'genres', 'reviews'])->paginate(10);
+        $books = Book::with(['author', 'genres', 'reviews'])->paginate(10);
         return view('dashboard.books', compact('books'));
     }
 
