@@ -15,6 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(prepend: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
+        
+        // Register custom middleware aliases
+        $middleware->alias([
+            'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

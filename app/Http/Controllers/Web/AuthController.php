@@ -17,6 +17,12 @@ class AuthController extends Controller
      */
     public function showLoginForm()
     {
+        // If user is already authenticated, redirect to dashboard
+        if (Auth::check()) {
+            return redirect()->route('dashboard')
+                ->with('info', 'You are already logged in.');
+        }
+        
         return view('auth.login');
     }
 
@@ -25,6 +31,12 @@ class AuthController extends Controller
      */
     public function showRegisterForm()
     {
+        // If user is already authenticated, redirect to dashboard
+        if (Auth::check()) {
+            return redirect()->route('dashboard')
+                ->with('info', 'You are already logged in.');
+        }
+        
         return view('auth.register');
     }
 

@@ -1,75 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Books - Libretto</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-sm border-b">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center space-x-4">
-                    <a href="{{ route('dashboard') }}" class="text-xl font-bold text-gray-900">Libretto</a>
-                    <span class="text-gray-500">/</span>
-                    <span class="text-gray-700">Books</span>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <span class="text-gray-700">{{ Auth::user()->name }}</span>
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
-                        @csrf
-                        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">
-                            Logout
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </nav>
+@extends('layouts.app')
 
-    <!-- Main Content -->
-    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div class="bg-white rounded-lg shadow">
-            <div class="px-6 py-4 border-b border-gray-200">
-                <h1 class="text-2xl font-semibold text-gray-900">Books</h1>
+@section('title', 'Books - Libretto')
+
+@section('content')
+@php
+    $breadcrumb = 'Books';
+@endphp
+
+<div class="bg-white rounded-lg shadow">
+    <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+        <h1 class="text-2xl font-semibold text-gray-900">Books</h1>
+        <a href="{{ route('books.create') }}" 
+           class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            Add New Book
+        </a>
+    </div>
+    
+    <div class="p-6">
+        @if($books->count() > 0)
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Publication Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Genres</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach($books as $book)
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $book->id }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $book->title }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <a href="{{ route('authors.show', $book->author) }}" class="text-blue-600 hover:text-blue-900">
+                                    {{ $book->author->name }}
+                                </a>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ $book->publication_date ? $book->publication_date->format('M d, Y') : 'Unknown' }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                @if($book->genres->count() > 0)
+                                    <div class="flex flex-wrap gap-1">
+                                        @foreach($book->genres->take(2) as $genre)
+                                            <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">
+                                                {{ $genre->name }}
+                                            </span>
+                                        @endforeach
+                                        @if($book->genres->count() > 2)
+                                            <span class="text-xs text-gray-500">+{{ $book->genres->count() - 2 }} more</span>
+                                        @endif
+                                    </div>
+                                @else
+                                    <span class="text-gray-400">No genres</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                <a href="{{ route('books.show', $book) }}" 
+                                   class="text-blue-600 hover:text-blue-900">View</a>
+                                <a href="{{ route('books.edit', $book) }}" 
+                                   class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                <form method="POST" action="{{ route('books.destroy', $book) }}" 
+                                      class="inline" onsubmit="confirmDelete(event)">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
             
-            <div class="p-6">
-                @if($books->count() > 0)
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        @foreach($books as $book)
-                        <div class="bg-gray-50 rounded-lg p-6">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ $book->title }}</h3>
-                            <p class="text-gray-600 mb-2">
-                                <strong>Author:</strong> 
-                                {{ $book->author->name ?? 'No author' }}
-                            </p>
-                            <p class="text-gray-600 mb-2">
-                                <strong>Genres:</strong> 
-                                {{ $book->genres->pluck('name')->join(', ') ?: 'No genres' }}
-                            </p>
-                            <p class="text-gray-600 mb-2">
-                                <strong>Reviews:</strong> {{ $book->reviews->count() }}
-                            </p>
-                            <p class="text-sm text-gray-500">
-                                Added: {{ $book->created_at->format('M d, Y') }}
-                            </p>
-                        </div>
-                        @endforeach
-                    </div>
-                    
-                    <div class="mt-6">
-                        {{ $books->links() }}
-                    </div>
-                @else
-                    <div class="text-center py-8">
-                        <p class="text-gray-500">No books found.</p>
-                    </div>
-                @endif
+            <div class="mt-4">
+                {{ $books->links() }}
             </div>
-        </div>
+        @else
+            <div class="text-center py-8">
+                <p class="text-gray-500">No books found.</p>
+                <a href="{{ route('books.create') }}" 
+                   class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                    Add First Book
+                </a>
+            </div>
+        @endif
     </div>
-</body>
-</html>
+</div>
+@endsection

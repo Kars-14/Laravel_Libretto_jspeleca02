@@ -13,6 +13,12 @@
             <p class="text-gray-600 mt-2">Create your account</p>
         </div>
 
+        @if (session('info'))
+            <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-4">
+                {{ session('info') }}
+            </div>
+        @endif
+
         @if ($errors->any())
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
                 <ul class="list-disc list-inside">
