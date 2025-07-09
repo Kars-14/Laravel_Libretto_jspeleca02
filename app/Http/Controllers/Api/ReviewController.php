@@ -14,7 +14,7 @@ class ReviewController extends Controller
      */
     public function index()
     {
-        $reviews = Review::with(['book.author', 'user'])->paginate(15);
+        $reviews = Review::with(['book.author'])->paginate(15);
         
         return response()->json([
             'status' => 'success',

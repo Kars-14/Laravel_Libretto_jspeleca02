@@ -58,7 +58,7 @@ class DashboardController extends Controller
      */
     public function reviews()
     {
-        $reviews = Review::with(['book', 'user'])->paginate(10);
+        $reviews = Review::with(['book'])->paginate(10);
         return view('dashboard.reviews', compact('reviews'));
     }
 }

@@ -46,7 +46,17 @@
                                 <span class="text-sm text-gray-500">{{ $review->created_at->format('M d, Y') }}</span>
                             </div>
                             <p class="text-gray-600 mb-2">
-                                <strong>Reviewer:</strong> {{ $review->user->name ?? 'Anonymous' }}
+                                <strong>Rating:</strong> 
+                                <span class="text-yellow-500">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= ($review->rating ?? 0))
+                                            ★
+                                        @else
+                                            ☆
+                                        @endif
+                                    @endfor
+                                </span>
+                                ({{ $review->rating ?? 'No rating' }}/5)
                             </p>
                             <p class="text-gray-700">{{ $review->content ?? 'No review content' }}</p>
                         </div>
