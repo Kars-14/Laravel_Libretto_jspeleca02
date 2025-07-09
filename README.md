@@ -98,10 +98,6 @@ Visit: `http://localhost:8000`
 - **Register**: `http://localhost:8000/register`
 - **Dashboard**: `http://localhost:8000/dashboard`
 
-**Test Credentials:**
-- Email: `test@example.com`
-- Password: `password`
-
 ### **API Endpoints**
 
 #### **Authentication**
@@ -109,8 +105,8 @@ Visit: `http://localhost:8000`
 # Login
 POST /api/login
 {
-    "email": "test@example.com",
-    "password": "password"
+    "email": "user@example.com",
+    "password": "your_password"
 }
 
 # Register
