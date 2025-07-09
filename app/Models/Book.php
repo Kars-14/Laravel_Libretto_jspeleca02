@@ -11,16 +11,25 @@ class Book extends Model
     
     protected $fillable = ['title', 'author_id'];
     
+    /**
+     * Get the author that wrote the book
+     */
     public function author()
     {
         return $this->belongsTo(Author::class);
     }
     
+    /**
+     * Get the genres associated with the book
+     */
     public function genres()
     {
-        return $this->belongsToMany(Genre::class);
+        return $this->belongsToMany(Genre::class, 'book_genre');
     }
     
+    /**
+     * Get the reviews for the book
+     */
     public function reviews()
     {
         return $this->hasMany(Review::class);
