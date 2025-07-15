@@ -17,16 +17,29 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create authors with books, genres, and reviews
-        Author::factory(10)->create()->each(function ($author) {
-            $books = Book::factory(3)->create(['author_id' => $author->id]);
+        // Create 10 authors
+        $authors = Author::factory(10)->create();
+        
+        // Create 10 genres
+        $genres = Genre::factory(10)->create();
+        
+        // Create 10 books and assign them to random authors
+        $books = collect();
+        for ($i = 0; $i < 10; $i++) {
+            $book = Book::factory()->create([
+                'author_id' => $authors->random()->id,
+            ]);
             
-            $books->each(function ($book) {
-                $genres = Genre::factory(2)->create();
-                $book->genres()->attach($genres);
-                
-                Review::factory(5)->create(['book_id' => $book->id]);
-            });
+            // Attach 1-3 random genres to each book
+            $randomGenres = $genres->random(rand(1, 3));
+            $book->genres()->attach($randomGenres);
+            
+            $books->push($book);
+        }
+        
+        // Create 2-5 reviews for each book
+        $books->each(function ($book) {
+            Review::factory(rand(2, 5))->create(['book_id' => $book->id]);
         });
     }
 }

@@ -17,14 +17,20 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        $authorsCount = Author::count();
+        $booksCount = Book::count();
+        $genresCount = Genre::count();
+        $reviewsCount = Review::count();
+        $recentBooks = Book::with(['author', 'genres'])->latest()->limit(6)->get();
+
         $stats = [
-            'authors' => Author::count(),
-            'books' => Book::count(),
-            'genres' => Genre::count(),
-            'reviews' => Review::count(),
+            'authors' => $authorsCount,
+            'books' => $booksCount,
+            'genres' => $genresCount,
+            'reviews' => $reviewsCount,
         ];
 
-        return view('dashboard.index', compact('stats'));
+        return view('dashboard.index', compact('stats', 'authorsCount', 'booksCount', 'genresCount', 'reviewsCount', 'recentBooks'));
     }
 
     /**
@@ -163,7 +169,7 @@ class DashboardController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'publication_date' => 'nullable|date',
+            'publication_year' => 'nullable|integer|min:1000|max:2030',
             'isbn' => 'nullable|string|max:255',
             'author_id' => 'required|exists:authors,id',
             'genres' => 'array',
@@ -212,7 +218,7 @@ class DashboardController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'publication_date' => 'nullable|date',
+            'publication_year' => 'nullable|integer|min:1000|max:2030',
             'isbn' => 'nullable|string|max:255',
             'author_id' => 'required|exists:authors,id',
             'genres' => 'array',
@@ -320,5 +326,31 @@ class DashboardController extends Controller
 
         return redirect()->route('genres.index')
             ->with('success', 'Genre deleted successfully.');
+    }
+    
+    /**
+     * Store a review for a specific book
+     */
+    public function storeBookReview(Request $request, Book $book)
+    {
+        $validator = Validator::make($request->all(), [
+            'reviewer_name' => 'required|string|max:255',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string|max:1000',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        Review::create([
+            'book_id' => $book->id,
+            'reviewer_name' => $request->reviewer_name,
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+        ]);
+
+        return redirect()->route('books.show', $book)
+            ->with('success', 'Review added successfully.');
     }
 }

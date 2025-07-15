@@ -16,8 +16,15 @@ class AuthorFactory extends Factory
      */
     public function definition(): array
     {
+        $authors = [
+            'J.K. Rowling', 'Stephen King', 'Agatha Christie', 'Ernest Hemingway',
+            'Jane Austen', 'Mark Twain', 'George Orwell', 'F. Scott Fitzgerald',
+            'Harper Lee', 'Charles Dickens', 'Gabriel García Márquez', 'Toni Morrison',
+            'Leo Tolstoy', 'Maya Angelou', 'Edgar Allan Poe'
+        ];
+        
         return [
-            'name' => $this->faker->name,
+            'name' => $this->faker->randomElement($authors),
         ];
     }
 }

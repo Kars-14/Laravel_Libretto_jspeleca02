@@ -28,6 +28,9 @@ Route::get('/books/{book}/edit', [DashboardController::class, 'editBook'])->name
 Route::put('/books/{book}', [DashboardController::class, 'updateBook'])->name('books.update');
 Route::delete('/books/{book}', [DashboardController::class, 'destroyBook'])->name('books.destroy');
 
+// Book Reviews
+Route::post('/books/{book}/reviews', [DashboardController::class, 'storeBookReview'])->name('books.reviews.store');
+
 // Genres CRUD
 Route::get('/genres', [DashboardController::class, 'genres'])->name('genres.index');
 Route::get('/genres/create', [DashboardController::class, 'createGenre'])->name('genres.create');

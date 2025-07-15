@@ -19,7 +19,8 @@ class ReviewFactory extends Factory
     {
         return [
             'book_id' => Book::factory(),
-            'content' => $this->faker->paragraph,
+            'reviewer_name' => $this->faker->name,
+            'comment' => $this->faker->paragraph,
             'rating' => $this->faker->numberBetween(1, 5),
         ];
     }

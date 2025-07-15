@@ -59,13 +59,16 @@
             </div>
 
             <div>
-                <label for="publication_date" class="block text-sm font-medium text-gray-700">Publication Date (Optional)</label>
-                <input type="date" 
-                       id="publication_date" 
-                       name="publication_date" 
-                       value="{{ old('publication_date') }}"
+                <label for="publication_year" class="block text-sm font-medium text-gray-700">Publication Year (Optional)</label>
+                <input type="number" 
+                       id="publication_year" 
+                       name="publication_year" 
+                       value="{{ old('publication_year') }}"
+                       min="1000"
+                       max="2030"
+                       placeholder="2024"
                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                @error('publication_date')
+                @error('publication_year')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
