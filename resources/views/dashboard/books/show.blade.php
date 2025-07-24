@@ -124,6 +124,30 @@
                 @else
                     <p class="text-gray-500 text-sm">This book has no reviews yet.</p>
                 @endif
+
+                @auth
+                <div class="mt-6">
+                    <h4 class="text-md font-semibold mb-2">Add a Review</h4>
+                    <form method="POST" action="{{ route('reviews.store') }}" class="space-y-4">
+                        @csrf
+                        <input type="hidden" name="book_id" value="{{ $book->id }}">
+                        <div>
+                            <label for="rating" class="block text-sm font-medium text-gray-700">Rating</label>
+                            <select name="rating" id="rating" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                                <option value="">Select a rating</option>
+                                @for($i = 1; $i <= 5; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div>
+                            <label for="comment" class="block text-sm font-medium text-gray-700">Comment</label>
+                            <textarea name="comment" id="comment" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" placeholder="Write your review here..." required></textarea>
+                        </div>
+                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Add Review</button>
+                    </form>
+                </div>
+                @endauth
             </div>
         </div>
 

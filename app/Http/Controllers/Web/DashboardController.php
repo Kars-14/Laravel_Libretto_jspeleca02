@@ -333,4 +333,29 @@ class DashboardController extends Controller
         return redirect()->route('genres.index')
             ->with('success', 'Genre deleted successfully.');
     }
+    /**
+     * Store a newly created review for a book (from book details page)
+     */
+    public function storeReview(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'book_id' => 'required|exists:books,id',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string|max:1000',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $review = new Review();
+        $review->book_id = $request->book_id;
+        $review->user_id = auth()->id();
+        $review->rating = $request->rating;
+        $review->comment = $request->comment;
+        $review->save();
+
+        return redirect()->route('books.show', $request->book_id)
+            ->with('success', 'Review added successfully.');
+    }
 }
