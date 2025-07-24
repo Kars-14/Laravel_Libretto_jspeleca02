@@ -17,14 +17,26 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $stats = [
-            'authors' => Author::count(),
-            'books' => Book::count(),
-            'genres' => Genre::count(),
-            'reviews' => Review::count(),
-        ];
+        $authorsCount = Author::count();
+        $booksCount = Book::count();
+        $genresCount = Genre::count();
+        $reviewsCount = Review::count();
 
-        return view('dashboard.index', compact('stats'));
+        $recentBooks = Book::with('author', 'genres')->latest()->take(10)->get();
+        $recentAuthors = Author::latest()->take(10)->get();
+        $recentGenres = Genre::latest()->take(10)->get();
+        $recentReviews = Review::latest()->take(10)->get();
+
+        return view('dashboard.index', compact(
+            'authorsCount',
+            'booksCount',
+            'genresCount',
+            'reviewsCount',
+            'recentBooks',
+            'recentAuthors',
+            'recentGenres',
+            'recentReviews'
+        ));
     }
 
     /**

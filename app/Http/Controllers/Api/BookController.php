@@ -14,14 +14,24 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::with(['author', 'genres', 'reviews'])->paginate(15);
-        
-        return response()->json([
-            'status' => 'success',
-            'data' => $books
-        ]);
+        $books = Book::paginate(5);
+    
+        $response = [
+            //'status' => 'success',
+            'data' => [
+                'items' => $books->items(),
+                'pagination' => [
+                    'current_page' => $books->currentPage(),
+                    'per_page' => $books->perPage(),
+                    'total' => $books->total(),
+                    'last_page' => $books->lastPage(),
+                ],
+            ],
+        ];
+    
+        return response()->json($response, 200, [], JSON_PRETTY_PRINT);
     }
-
+    
     /**
      * Store a newly created book.
      */
