@@ -129,4 +129,21 @@ class BookController extends Controller
             'message' => 'Book deleted successfully'
         ]);
     }
+
+    /**
+     * Get all reviews for a specific book.
+     */
+    public function reviews(Book $book)
+    {
+        $reviews = $book->reviews()->with('user')->latest()->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'book' => $book->load(['author', 'genres']),
+                'reviews' => $reviews,
+                'reviews_count' => $reviews->count()
+            ]
+        ]);
+    }
 }

@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Books CRUD
     Route::apiResource('books', BookController::class);
+    Route::get('books/{book}/reviews', [BookController::class, 'reviews']);
     
     // Genres CRUD
     Route::apiResource('genres', GenreController::class);
