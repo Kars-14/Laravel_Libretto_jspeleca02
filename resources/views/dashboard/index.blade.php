@@ -65,19 +65,19 @@
             <h3 class="text-lg font-semibold text-gray-900">Quick Actions</h3>
         </div>
         <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <a href="{{ route('authors.index') }}" class="bg-blue-50 hover:bg-blue-100 p-4 rounded-lg text-center transition-colors">
+            <a href="/authors" class="bg-blue-50 hover:bg-blue-100 p-4 rounded-lg text-center transition-colors">
                 <div class="text-blue-600 font-medium">Manage Authors</div>
                 <div class="text-blue-500 text-sm">View and edit authors</div>
             </a>
-            <a href="{{ route('books.index') }}" class="bg-green-50 hover:bg-green-100 p-4 rounded-lg text-center transition-colors">
+            <a href="/books" class="bg-green-50 hover:bg-green-100 p-4 rounded-lg text-center transition-colors">
                 <div class="text-green-600 font-medium">Manage Books</div>
                 <div class="text-green-500 text-sm">View and edit books</div>
             </a>
-            <a href="{{ route('genres.index') }}" class="bg-yellow-50 hover:bg-yellow-100 p-4 rounded-lg text-center transition-colors">
+            <a href="/genres" class="bg-yellow-50 hover:bg-yellow-100 p-4 rounded-lg text-center transition-colors">
                 <div class="text-yellow-600 font-medium">Manage Genres</div>
                 <div class="text-yellow-500 text-sm">View and edit genres</div>
             </a>
-            <a href="{{ route('reviews.index') }}" class="bg-purple-50 hover:bg-purple-100 p-4 rounded-lg text-center transition-colors">
+            <a href="/reviews" class="bg-purple-50 hover:bg-purple-100 p-4 rounded-lg text-center transition-colors">
                 <div class="text-purple-600 font-medium">Manage Reviews</div>
                 <div class="text-purple-500 text-sm">View and edit reviews</div>
             </a>

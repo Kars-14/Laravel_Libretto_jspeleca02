@@ -65,10 +65,11 @@ class AuthController extends Controller
         // Check if user already has a valid token
         $existingToken = $user->tokens()->where('name', 'auth-token')->first();
 
-        if ($existingToken && (!$existingToken->expires_at || $existingToken->expires_at->isFuture())) {
+        if ($existingToken && (!$existingToken->expires_at || $existingToken->expires_at->isFuture()) && $user->last_api_token) {
+            // Return the stored plain text token if available and valid
             return response()->json([
                 'message' => 'Login successful',
-                'token' => null, // Token can't be re-shown once created
+                'token' => $user->last_api_token,
                 'user' => [
                     'id' => $user->id,
                     'name' => $user->name,
@@ -82,6 +83,8 @@ class AuthController extends Controller
 
         $tokenResult = $user->createToken('auth-token', ['*'], now()->addDay());
         $token = $tokenResult->plainTextToken;
+        $user->last_api_token = $token;
+        $user->save();
 
         return response()->json([
             'message' => 'Login successful',
