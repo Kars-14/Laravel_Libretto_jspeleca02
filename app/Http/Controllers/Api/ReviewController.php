@@ -69,16 +69,31 @@ class ReviewController extends Controller
     }
 
     /**
-     * Display the specified review.
+     * Display the specified review or all reviews for a book if book_id is provided.
      */
-    public function show(Review $review)
+    public function show($id)
     {
-        $review->load(['book.author', 'user']);
-        
+        // If $id is a book id, return all reviews for that book
+        $bookReviews = \App\Models\Review::where('book_id', $id)->with('user')->get();
+        if ($bookReviews->count() > 0) {
+            return response()->json([
+                'status' => 'success',
+                'data' => $bookReviews,
+                'reviews_count' => $bookReviews->count()
+            ]);
+        }
+        // Otherwise, fallback to single review by id
+        $review = \App\Models\Review::with(['book.author', 'user'])->find($id);
+        if ($review) {
+            return response()->json([
+                'status' => 'success',
+                'data' => $review
+            ]);
+        }
         return response()->json([
-            'status' => 'success',
-            'data' => $review
-        ]);
+            'status' => 'error',
+            'message' => 'Review or book not found'
+        ], 404);
     }
 
     /**
